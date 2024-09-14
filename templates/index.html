@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Image for Pest Detection</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 800px;
+            margin-top: 50px;
+        }
+        .jumbotron-custom {
+            background-color: #f8f9fa;
+            border-radius: 0.3rem;
+            padding: 2rem 2rem;
+            margin-bottom: 2rem;
+        }
+        .card-custom {
+            border: 1px solid #e3e3e3;
+            border-radius: 0.3rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+        }
+        .navbar-custom {
+            background-color: #343a40;
+        }
+        .navbar-custom .navbar-brand,
+        .navbar-custom .nav-link {
+            color: #fff;
+        }
+        .navbar-custom .nav-link:hover {
+            color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-custom navbar-dark">
+        <a class="navbar-brand" href="#">Pest Detection</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('chat') }}">Chat</a>
+                </li>                
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+                {% if user_type == 'user' %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Jumbotron for Welcome Message -->
+    <div class="jumbotron jumbotron-custom">
+        <h1 class="display-4">Welcome to Pest Detection</h1>
+        <p class="lead">Upload an image to detect pests and view recommendations.</p>
+        {% if user_type == 'user' %}
+        <hr class="my-4">
+        <p><strong>User Information:</strong></p>
+        <ul>
+            <li>ID: {{ user_info.id }}</li>
+            <li>Username: {{ user_info.username }}</li>
+            <li>Email: {{ user_info.email }}</li>
+            <!-- Add more fields if needed -->
+        </ul>
+        {% endif %}
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="card card-custom">
+            <div class="card-body">
+                <h5 class="card-title">Upload an Image for Detection</h5>
+                <form method="POST" action="/upload" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="fileInput">Choose an image</label>
+                        <input type="file" class="form-control-file" id="fileInput" name="file" accept="image/*" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Upload and Detect</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

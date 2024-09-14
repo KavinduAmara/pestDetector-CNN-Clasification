@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+    <title>Chat Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Chat Page</h1>
+        <div class="card">
+            <div class="card-body">
+                <div id="chatbox" class="mb-3">
+                    {% for message in messages %}
+                        <div class="message">
+                            <strong>{{ message.username }}:</strong> {{ message.message }} <br>
+                            <small class="text-muted">{{ message.created_at }}</small>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <form action="{{ url_for('send_message') }}" method="POST">
+                    <div class="form-group">
+                        <textarea class="form-control" name="message" placeholder="Type your message here..." rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optionally, you can add JavaScript here for real-time updates -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

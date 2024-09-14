@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detection Results</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        .header {
+            margin-bottom: 30px;
+        }
+        .weather-section, .detection-section {
+            margin-bottom: 30px;
+        }
+        .weather-table th, .weather-table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .detection-card {
+            margin-bottom: 20px;
+        }
+        .detection-card img {
+            margin-top: 10px;
+            border-radius: 8px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header text-center">
+            <h1 class="display-4">Detection Results</h1>
+        </div>
+
+        <!-- Uploaded Image -->
+        <div class="mb-4 text-center">
+            <img src="{{ image_path }}" alt="Uploaded Image" class="img-fluid rounded shadow">
+        </div>
+
+        <!-- Current Weather -->
+        <div class="weather-section">
+            <h2 class="mb-3">Current Weather</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card text-white bg-primary mb-3">
+                        <div class="card-header">Temperature</div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ current_weather.temperature_2m }} °C</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card text-white bg-secondary mb-3">
+                        <div class="card-header">Wind Speed</div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ current_weather.wind_speed_10m }} km/h</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hourly Weather Forecast -->
+        <div class="weather-section">
+            <h2 class="mb-3">Hourly Weather Forecast</h2>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered weather-table">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Time</th>
+                            <th>Temperature (°C)</th>
+                            <th>Relative Humidity (%)</th>
+                            <th>Wind Speed (km/h)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for forecast in hourly_forecast %}
+                        <tr>
+                            <td>{{ forecast.time }}</td>
+                            <td>{{ forecast.temperature }}</td>
+                            <td>{{ forecast.humidity }}</td>
+                            <td>{{ forecast.wind_speed }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Detection Details -->
+        <div class="detection-section">
+            <h2 class="mb-3">Detection Details</h2>
+            {% for detection in detections %}
+            <div class="card detection-card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Class: {{ detection.class }}</h5>
+                    <p class="card-text"><strong>Confidence:</strong> {{ detection.confidence }}%</p>
+                    <p class="card-text"><strong>Bounding Box:</strong> {{ detection.bbox }}</p>
+
+                    {% if detection.pest_info %}
+                    <hr>
+                    <h6>Pest Information:</h6>
+                    <p><strong>Name:</strong> {{ detection.pest_info.name }}</p>
+                    <p><strong>Description:</strong> {{ detection.pest_info.description }}</p>
+                    <p><strong>Control Methods:</strong> {{ detection.pest_info.control_methods }}</p>
+                    <img src="{{ detection.pest_info.image_url }}" alt="{{ detection.pest_info.name }}" class="img-fluid rounded">
+                    {% else %}
+                    <p class="text-muted"><strong>No additional pest information available.</strong></p>
+                    {% endif %}
+
+                    {% if detection.recommendations %}
+                    <hr>
+                    <h6>Recommendations:</h6>
+                    <ul>
+                        {% for rec in detection.recommendations %}
+                            <li>{{ rec['recommendation'] }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted"><strong>No recommendations available for this pest.</strong></p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        &copy; {{ current_year }} All rights reserved.
+    </div>
+
+    <!-- Bootstrap JS and dependencies (optional but recommended) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
